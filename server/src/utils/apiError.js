@@ -1,14 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
 class ApiError extends Error {
-  /**
-   * Constructs an ApiError instance.
-   *
-   * @param {number} statusCode - HTTP status code (e.g., 400, 500).
-   * @param {string} [message="Internal Server Error"] - Error message.
-   * @param {Array<{ field?: string, message: string }>|string|object} [errors=[]] - Array of error details, a single error object, or a string.
-   * @param {any} [data=null] - Optional additional data.
-   */
   constructor(
     statusCode,
     message = 'Internal Server Error',
@@ -29,7 +21,7 @@ class ApiError extends Error {
       throw new TypeError(`Invalid message: ${message}. Must be a string.`);
     }
 
-    super(message); // Call the parent Error constructor
+    super(message);
 
     this.statusCode = statusCode;
     this.success = false;
@@ -43,21 +35,15 @@ class ApiError extends Error {
 
     this.data = data;
     this.timestamp = new Date().toISOString();
-    this.errorId = uuidv4(); // Generate a unique error ID for tracking
+    this.errorId = uuidv4();
 
-    // Capture stack trace only in non-production environments
     if (process.env.NODE_ENV !== 'production') {
       Error.captureStackTrace(this, this.constructor);
     }
 
-    // Freeze object to prevent modification after creation
     Object.freeze(this);
   }
 
-  /**
-   * Serializes the ApiError instance into a JSON object.
-   * @returns {object}
-   */
   toJSON() {
     return {
       errorId: this.errorId,
@@ -70,10 +56,6 @@ class ApiError extends Error {
     };
   }
 
-  /**
-   * Returns a string representation of the error.
-   * @returns {string}
-   */
   toString() {
     return `[${this.timestamp}] ApiError (${this.statusCode}): ${this.message} | ID: ${this.errorId}`;
   }

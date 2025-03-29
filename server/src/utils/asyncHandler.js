@@ -1,11 +1,5 @@
-/**
- * Wraps an asynchronous Express route handler to automatically catch errors and pass them to the next middleware.
- * @param {Function} fn - The asynchronous route handler function.
- * @returns {Function} - A wrapped route handler that catches errors and passes them to the next middleware.
- */
 const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch((error) => {
-    // Enhanced logging in development mode
     if (process.env.NODE_ENV === 'development') {
       const logError = {
         message: error.message || 'Unknown error occurred',
@@ -30,7 +24,6 @@ const asyncHandler = (fn) => (req, res, next) => {
       );
     }
 
-    // Pass the error to the next middleware
     next(error);
   });
 };
