@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
+dotenv.config();
+
+import { CONFIG } from './utils/config.js';
 import connectDB from './db/connectDB.js';
 import app from './app.js';
 
-dotenv.config();
-
-const port = process.env.PORT || 5000;
+const port = CONFIG.PORT || 5000;
 
 const startServer = async () => {
   try {
@@ -22,7 +23,7 @@ const startServer = async () => {
 };
 
 process.on('uncaughtException', (error) => {
-  console.error('Uncaught Exception:', error);
+  console.error('Uncaught Exception:', error.message, error.stack);
   process.exit(1);
 });
 

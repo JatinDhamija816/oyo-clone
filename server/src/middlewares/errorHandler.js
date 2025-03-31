@@ -1,9 +1,10 @@
 import ApiError from '../utils/apiError.js';
+import { CONFIG } from '../utils/config.js';
 
 const errorHandler = (err, req, res, next) => {
   if (res.headersSent) return next(err);
 
-  if (process.env.NODE_ENV === 'development') {
+  if (CONFIG.NODE_ENV === 'development') {
     console.error('🚨 [ErrorHandler]:', {
       message: err.message,
       stack: err.stack,
@@ -11,26 +12,22 @@ const errorHandler = (err, req, res, next) => {
       url: req.originalUrl,
       params: req.params,
       query: req.query,
-      ...(process.env.LOG_REQUEST_BODY === 'true' && { body: req.body }), // Log body only if enabled
+      ...(CONFIG.LOG_REQUEST_BODY && { body: req.body }),
     });
   }
 
-  if (err instanceof ApiError) {
-    return res.status(err.statusCode).json({
-      success: false,
-      message: err.message,
-      errors: err.errors || [],
-      data: err.data || null,
-      errorId: err.errorId,
-      timestamp: err.timestamp,
-    });
+  if (!(err instanceof ApiError)) {
+    err = new ApiError(500, 'Internal Server Error');
   }
 
-  return res.status(500).json({
+  return res.status(err.statusCode).json({
     success: false,
-    message: 'Internal Server Error',
-    errorId: err.errorId || null,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    message: err.message,
+    errors: err.errors || [],
+    data: err.data || null,
+    errorId: err.errorId,
+    timestamp: err.timestamp,
+    ...(CONFIG.NODE_ENV === 'development' && { stack: err.stack }),
   });
 };
 

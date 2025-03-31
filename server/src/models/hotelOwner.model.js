@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+import { model, Schema, Types } from 'mongoose';
 
 const hotelOwnerSchema = new Schema(
   {
@@ -25,7 +25,7 @@ const hotelOwnerSchema = new Schema(
     },
     hotels: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Types.ObjectId,
         ref: 'Hotel',
       },
     ],

@@ -1,6 +1,8 @@
+import { CONFIG } from './config.js';
+
 const asyncHandler = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch((error) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (CONFIG.NODE_ENV === 'development') {
       const logError = {
         message: error.message || 'Unknown error occurred',
         stack: error.stack || 'No stack trace available',
@@ -9,10 +11,10 @@ const asyncHandler = (fn) => (req, res, next) => {
           url: req.originalUrl,
           params: req.params,
           query: req.query,
-          ...(process.env.LOG_REQUEST_BODY === 'true' && {
+          ...(CONFIG.LOG_REQUEST_BODY && {
             body:
               req.body && Object.keys(req.body).length > 0
-                ? JSON.stringify(req.body, null, 2).slice(0, 500) + '...' // ✅ Limit large bodies
+                ? JSON.stringify(req.body, null, 2).slice(0, 500) + '...'
                 : undefined,
           }),
         },
@@ -22,6 +24,10 @@ const asyncHandler = (fn) => (req, res, next) => {
         '🚨 AsyncHandler Error:',
         JSON.stringify(logError, null, 2)
       );
+    }
+
+    if (!(error instanceof ApiError)) {
+      error = new ApiError(500, 'Internal Server Error');
     }
 
     next(error);

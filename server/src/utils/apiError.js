@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
+import { CONFIG } from './config.js';
+import { ERROR_MESSAGES } from './constants.js';
 
 class ApiError extends Error {
   constructor(
     statusCode,
-    message = 'Internal Server Error',
+    message = ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
     errors = [],
     data = null
   ) {
@@ -37,7 +39,7 @@ class ApiError extends Error {
     this.timestamp = new Date().toISOString();
     this.errorId = uuidv4();
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (CONFIG.NODE_ENV !== 'production') {
       Error.captureStackTrace(this, this.constructor);
     }
 

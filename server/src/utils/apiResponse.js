@@ -1,5 +1,11 @@
+import { SUCCESS_MESSAGES } from './constants.js';
+
 class ApiResponse {
-  constructor(statusCode = 200, message = 'Success', data = {}) {
+  constructor(
+    statusCode = 200,
+    message = SUCCESS_MESSAGES.DEFAULT_SUCCESS,
+    data = {}
+  ) {
     if (
       !Number.isInteger(statusCode) ||
       statusCode < 100 ||
