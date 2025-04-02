@@ -1,3 +1,4 @@
+import ApiError from './apiError.js';
 import { CONFIG } from './config.js';
 
 const asyncHandler = (fn) => (req, res, next) => {

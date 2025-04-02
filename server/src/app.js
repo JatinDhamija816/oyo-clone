@@ -11,7 +11,11 @@ console.log(`Allowed Origins:`, CONFIG.CORS.ALLOWED_ORIGINS);
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || CONFIG.CORS.ALLOWED_ORIGINS.includes(origin)) {
+    if (
+      !origin ||
+      CONFIG.CORS.ALLOWED_ORIGINS.includes(origin) ||
+      'http://localhost:5173'
+    ) {
       return callback(null, true);
     }
     console.warn(`🚫 CORS blocked request from: ${origin}`);

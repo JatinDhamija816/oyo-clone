@@ -15,6 +15,7 @@ import {
   ERROR_MESSAGES,
   PASSWORD_CONFIG,
   SUCCESS_MESSAGES,
+  USER_ROLES,
 } from '../../utils/constants.js';
 
 const register = asyncHandler(async (req, res) => {
@@ -39,10 +40,7 @@ const register = asyncHandler(async (req, res) => {
   }
 
   if (!validatePassword(password)) {
-    throw new ApiError(
-      400,
-      `Password must be at least ${PASSWORD_CONFIG.MIN_LENGTH} characters long, include uppercase, lowercase, number, and special character.`
-    );
+    throw new ApiError(400, ERROR_MESSAGES.PASSWORD_POLICY);
   }
 
   const existingOwner = await HotelOwner.findOne({ email });

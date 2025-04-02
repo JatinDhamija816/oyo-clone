@@ -11,7 +11,7 @@ const setAuthCookies = (res, accessToken, refreshToken, role) => {
     httpOnly: true,
     secure: SECURE,
     sameSite: SAME_SITE,
-    domain: DOMAIN,
+    // domain: DOMAIN,
     path: '/',
   };
 
