@@ -11,7 +11,7 @@ const LandingPage = () => {
       </p>
       <button
         className="rounded-full px-7 py-2 bg-blue-500 text-white hover:bg-blue-600 text-xl transition-all shadow-lg shadow-gray-800/50 hover:scale-105 cursor-pointer"
-        onClick={() => navigate('/register')}
+        onClick={() => navigate("/register&login")}
       >
         Let's go
       </button>

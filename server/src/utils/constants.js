@@ -23,11 +23,17 @@ export const ERROR_MESSAGES = {
   PASSWORD_POLICY: `Password must be at least ${CONFIG.PASSWORD_POLICY.MIN_LENGTH} characters long, with 1 uppercase, 1 lowercase, and 1 special character`,
   EMAIL_ALREADY_REGISTERED: 'Email already registered',
   INTERNAL_SERVER_ERROR: 'Internal Server Error',
+  PLEASE_WAIT: 'Too many requests. Please wait 1 minute',
+  INVALID_OTP_FORMAT: 'Invalid OTP format',
+  OTP_EXPIRED: 'OTP expired or invalid',
+  INCORRECT_OTP: 'Incorrect OTP',
 };
 
 export const SUCCESS_MESSAGES = {
   DEFAULT_SUCCESS: 'Success',
+  OTP_SEND_SUCCESS: 'OTP Send Successfully',
   HOTEL_OWNER_REGISTERED: 'New hotel owner registered successfully',
+  OTP_VERIFIED: 'OTP verified successfully!',
 };
 
 export const PASSWORD_CONFIG = {

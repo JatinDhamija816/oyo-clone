@@ -32,4 +32,8 @@ export const CONFIG = {
     MIN_LENGTH: Number(process.env.PASSWORD_MIN_LENGTH) || 8,
     SALT_ROUNDS: Number(process.env.SALT_ROUNDS) || 10,
   },
+  EMAIL: {
+    USERNAME: process.env.USERNAME,
+    PASSWORD: process.env.PASSWORD,
+  },
 };
