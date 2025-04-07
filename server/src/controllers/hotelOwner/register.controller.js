@@ -1,3 +1,4 @@
+import Redis from 'ioredis';
 import asyncHandler from '../../utils/asyncHandler.js';
 import {
   validateEmail,
@@ -17,6 +18,8 @@ import {
   SUCCESS_MESSAGES,
   USER_ROLES,
 } from '../../utils/constants.js';
+
+const redisClient = new Redis();
 
 const register = asyncHandler(async (req, res) => {
   const { name, email, phone, password, confirmPassword } = req.body;
@@ -46,6 +49,11 @@ const register = asyncHandler(async (req, res) => {
   const existingOwner = await HotelOwner.findOne({ email });
   if (existingOwner) {
     throw new ApiError(400, ERROR_MESSAGES.EMAIL_ALREADY_REGISTERED);
+  }
+
+  const isVerified = await redisClient.get(`otp:${email}:verified`);
+  if (!isVerified) {
+    throw new ApiError(403, 'Please verify your email before registering.');
   }
 
   const hashedPassword = await passwordHashing(password);

@@ -20,17 +20,19 @@ const verifyOtp = asyncHandler(async (req, res) => {
   }
 
   const storedHashedOtp = await redisClient.get(`otp:${email}`);
-
   if (!storedHashedOtp) {
     throw new ApiError(400, ERROR_MESSAGES.OTP_EXPIRED);
   }
 
   const hashedOtp = crypto.createHash('sha256').update(otp).digest('hex');
-
   if (hashedOtp !== storedHashedOtp) {
     throw new ApiError(400, ERROR_MESSAGES.INCORRECT_OTP);
   }
 
+  // ✅ Set verified flag for 1 hour
+  await redisClient.setex(`otp:${email}:verified`, 3600, 'true');
+
+  // 🧹 Delete the OTP after successful verification
   await redisClient.del(`otp:${email}`);
 
   res.status(200).json(new ApiResponse(200, SUCCESS_MESSAGES.OTP_VERIFIED));

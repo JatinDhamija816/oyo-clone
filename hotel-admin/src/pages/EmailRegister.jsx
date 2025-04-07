@@ -57,18 +57,25 @@ const EmailRegister = () => {
     const finalOTP = otp.join("");
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) return setErrorMsg("Invalid email format");
+    if (!emailRegex.test(email)) {
+      setErrorMsg("Invalid email format");
+      setSuccessMsg("");
+      return;
+    }
 
     if (!finalOTP || finalOTP.length !== 6 || isNaN(finalOTP)) {
-      return setErrorMsg("Invalid OTP");
+      setErrorMsg("Invalid OTP");
+      setSuccessMsg("");
+      return;
     }
 
     try {
       const res = await verifyOTP(email, finalOTP);
       if (res.success) {
-        navigate("/register");
+        navigate("/register", { state: { email } });
       } else {
         setErrorMsg(res.message);
+        setSuccessMsg("");
       }
     } catch {
       setErrorMsg("Something went wrong. Please try again.");

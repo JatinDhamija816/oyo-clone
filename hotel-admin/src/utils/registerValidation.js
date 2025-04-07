@@ -1,17 +1,8 @@
-export const validationFields = (name, value, formData = {}) => {
+export const validationFields = (name, value) => {
   let errorMsg = "";
 
   if (name === "name") {
     errorMsg = value.trim() ? "" : "Name is required";
-  }
-
-  if (name === "email") {
-    if (!value.trim()) {
-      errorMsg = "Email is required";
-    } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      errorMsg = emailRegex.test(value) ? "" : "Invalid email format";
-    }
   }
 
   if (name === "phone") {
@@ -34,14 +25,6 @@ export const validationFields = (name, value, formData = {}) => {
         : "Password must be at least 8 characters long, with 1 uppercase, 1 lowercase, 1 special character, and 1 number";
     }
   }
-
-  // if (name === "confirmPassword") {
-  //   if (!value.trim()) {
-  //     errorMsg = "Confirm Password is required";
-  //   } else if (value !== formData.password) {
-  //     errorMsg = "Passwords do not match";
-  //   }
-  // }
 
   return errorMsg;
 };
