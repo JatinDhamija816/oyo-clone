@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { sendOTP, verifyOTP } from "../utils/api/hotelOwner.api";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,18 @@ const EmailRegister = () => {
 
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [timer, setTimer] = useState(0); // timer in seconds
+
+  useEffect(() => {
+    let interval;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(interval);
+  }, [timer]);
 
   const handleOtpChange = (index, e) => {
     const { value } = e.target;
@@ -44,6 +56,7 @@ const EmailRegister = () => {
         setSuccessMsg(res.message);
         setErrorMsg("");
         setOtpVisible(true);
+        setTimer(59); // start 59 second timer
       } else {
         setErrorMsg(res.message);
       }
@@ -101,6 +114,16 @@ const EmailRegister = () => {
         {errorMsg && <p className="text-red-500 text-sm mt-2">{errorMsg}</p>}
         {successMsg && (
           <p className="text-green-500 text-sm mt-2">{successMsg}</p>
+        )}
+
+        {otpVisible && (
+          <button
+            onClick={handleSendOtp}
+            className="text-blue-500 text-sm mt-2 disabled:text-gray-400 cursor-pointer"
+            disabled={timer > 0}
+          >
+            {timer > 0 ? `Resend OTP in ${timer}s` : "Resend OTP"}
+          </button>
         )}
 
         {otpVisible && (
